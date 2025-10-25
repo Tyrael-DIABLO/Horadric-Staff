@@ -42,9 +42,6 @@ public class BinaryTree {
      * 两个节点的最低公共祖先节点
      */
     public BinaryTreeNode lowestCommonAncestor(BinaryTreeNode p, BinaryTreeNode q) {
-        if (p == null || q == null) {
-            return null;
-        }
         return lowestCommonAncestor(root, p, q);
     }
 
@@ -370,17 +367,20 @@ public class BinaryTree {
         }
 
         public int minDepth() {
-            if (Objects.isNull(left) || Objects.isNull(right)) {
-                return 1;
-            } else {
-                return Math.min(left._minDepth(1), right._minDepth(1));
-            }
+            return _minDepth(0);
         }
 
         private int _minDepth(int depth) {
-            if (Objects.isNull(left) || Objects.isNull(right)) {
-                return depth + 1;
-            } else {
+            if (Objects.isNull(left) && Objects.isNull(right)) {
+                return depth;
+            }
+            else if (Objects.isNull(left)) {
+                return right._minDepth(depth + 1);
+            }
+            else if (Objects.isNull(right)) {
+                return left._minDepth(depth + 1);
+            }
+            else {
                 return Math.min(left._minDepth(depth + 1), right._minDepth(depth + 1));
             }
         }
@@ -449,11 +449,15 @@ public class BinaryTree {
         }
 
         public void insertLeft(BinaryTreeNode child) {
-            this.left = child;
+            if (Objects.isNull(this.left)) {
+                this.left = child;
+            }
         }
 
         public void insertRight(BinaryTreeNode child) {
-            this.right = child;
+            if (Objects.isNull(this.right)) {
+                this.right = child;
+            }
         }
 
         public BinaryTreeNode getLeft() {
