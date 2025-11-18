@@ -99,16 +99,16 @@ public class BTreeNode {
             int up = node.values.get(upIndex);
             // 当前节点分为左右两部分，左部的parent不变，右部的parent放在上升关键字右侧
             BTreeNode rNode = new BTreeNode(M);
-            rNode.values = new LinkedList(node.values.subList(upIndex + 1, M));
-            rNode.children = new LinkedList(node.children.subList(upIndex + 1, M+1));
+            rNode.values = new LinkedList<>(node.values.subList(upIndex + 1, M));
+            rNode.children = new LinkedList<>(node.children.subList(upIndex + 1, M + 1));
             /*  由于rNode.children是从node.children分离出来的,其parent仍指向node，
                 所以需要将rNode.children的parent改为指向rNode
              */
             for(BTreeNode rChild : rNode.children) {
                 rChild.parent = rNode;
             }
-            node.values = new LinkedList(node.values.subList(0, upIndex));
-            node.children = new LinkedList(node.children.subList(0, upIndex + 1));
+            node.values = new LinkedList<>(node.values.subList(0, upIndex));
+            node.children = new LinkedList<>(node.children.subList(0, upIndex + 1));
             // 从根节点中上升，选取上升关键字作为新的根节点
             if(node.parent == null) {
                 node.parent = new BTreeNode(M);
