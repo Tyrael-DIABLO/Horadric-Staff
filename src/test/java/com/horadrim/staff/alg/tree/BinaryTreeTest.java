@@ -3,8 +3,6 @@ package com.horadrim.staff.alg.tree;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.horadrim.staff.features.java.reflection.TestAnnotation;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -103,5 +101,58 @@ public class BinaryTreeTest {
         BinaryTree.BinaryTreeNode trueAncestor = tree.lowestCommonAncestor(right, left);
         Assertions.assertEquals(expectAncestor, trueAncestor);
         Assertions.assertEquals(20, trueAncestor.data());
+    }
+
+    /*
+     * 对于其中一个节点是孤儿节点，深度搜索无法对其进行判断
+     */
+    @Test
+    private void lowestCommonAncestor_lcaNotFoundTest() {
+        int [] preorder = new int[] {3, 9, 20, 15, 7};
+        int [] inorder = new int[] {9, 3, 15, 20, 7};
+        BinaryTree tree = BinaryTree.buildTreeByPreorderAndInorder(preorder, inorder);
+        BinaryTree.BinaryTreeNode left = tree.root().getRight().getLeft();
+        BinaryTree.BinaryTreeNode orphenNode = tree.new BinaryTreeNode(100);
+
+        BinaryTree.BinaryTreeNode trueAncestor = tree.lowestCommonAncestor(left, orphenNode);
+        Assertions.assertEquals(left, trueAncestor);
+    }
+
+    @Test
+    public void lowestCommonAncestorByBFS_sameNodeTest() {
+        int [] preorder = new int[] {3, 9, 20, 15, 7};
+        int [] inorder = new int[] {9, 3, 15, 20, 7};
+        BinaryTree tree = BinaryTree.buildTreeByPreorderAndInorder(preorder, inorder);
+        BinaryTree.BinaryTreeNode left = tree.root().getRight().getLeft();
+        BinaryTree.BinaryTreeNode right = tree.root().getRight().getLeft();
+        BinaryTree.BinaryTreeNode expectAncestor = tree.root().getRight().getLeft();
+        BinaryTree.BinaryTreeNode trueAncestor = tree.lowestCommonAncestorByBFS(left, right);
+        Assertions.assertEquals(expectAncestor, trueAncestor);
+        Assertions.assertEquals(15, trueAncestor.data());
+    }
+
+    @Test
+    public void lowestCommonAncestorByBFS_parentNodeTest() {
+        int [] preorder = new int[] {3, 9, 20, 15, 7};
+        int [] inorder = new int[] {9, 3, 15, 20, 7};
+        BinaryTree tree = BinaryTree.buildTreeByPreorderAndInorder(preorder, inorder);
+        BinaryTree.BinaryTreeNode left = tree.root().getRight().getLeft();
+        BinaryTree.BinaryTreeNode right = tree.root().getRight();
+        BinaryTree.BinaryTreeNode expectAncestor = tree.root().getRight();
+        BinaryTree.BinaryTreeNode trueAncestor = tree.lowestCommonAncestorByBFS(right, left);
+        Assertions.assertEquals(expectAncestor, trueAncestor);
+        Assertions.assertEquals(20, trueAncestor.data());
+    }
+
+    @Test
+    public void lowestCommonAncestorByBFS_lcaNotFoundTest() {
+        int [] preorder = new int[] {3, 9, 20, 15, 7};
+        int [] inorder = new int[] {9, 3, 15, 20, 7};
+        BinaryTree tree = BinaryTree.buildTreeByPreorderAndInorder(preorder, inorder);
+        BinaryTree.BinaryTreeNode left = tree.root().getRight().getLeft();
+        BinaryTree.BinaryTreeNode orphenNode = tree.new BinaryTreeNode(100);
+
+        BinaryTree.BinaryTreeNode trueAncestor = tree.lowestCommonAncestorByBFS(left, orphenNode);
+        Assertions.assertEquals(null, trueAncestor);
     }
 }

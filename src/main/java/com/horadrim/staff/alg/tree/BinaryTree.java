@@ -39,7 +39,64 @@ public class BinaryTree {
     }
 
     /*
-     * 两个节点的最低公共祖先节点
+     * 两个节点的最低公共祖先节点(广度搜索)
+     */
+    public BinaryTreeNode lowestCommonAncestorByBFS(BinaryTreeNode p, BinaryTreeNode q) {
+        if (root == null || root == p || root == q) {
+            return root;
+        }
+
+        boolean foundP = false;
+        boolean foundQ = false;
+        Map<BinaryTreeNode, BinaryTreeNode> parentMap = new HashMap<>();
+        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        parentMap.put(root, null);
+
+        while (!queue.isEmpty()) {
+            BinaryTreeNode current = queue.poll();
+
+            if (current.left != null) {
+                parentMap.put(current.left, current);
+                queue.offer(current.left);
+                if (current.right == p) {
+                    foundP = true;
+                } else if (current.right == q) {
+                    foundQ = true;
+                }
+            }
+
+            if (current.right != null) {
+                parentMap.put(current.right, current);
+                queue.offer(current.right);
+                if (current.right == p) {
+                    foundP = true;
+                } else if (current.right == q) {
+                    foundQ = true;
+                }
+            }
+
+            if (foundP && foundQ) {
+                break;
+            }
+        }
+
+        // 将p的所有祖先节点存入一个集合
+        Set<BinaryTreeNode> ancestors = new HashSet<>();
+        while (p != null) {
+            ancestors.add(p);
+            p = parentMap.get(p);
+        }
+        while (q != null) {
+            if (ancestors.contains(q)) {
+                return q;
+            }
+            q = parentMap.get(q);
+        }
+        return null;
+    }
+    /*
+     * 两个节点的最低公共祖先节点(深度搜索递归)
      */
     public BinaryTreeNode lowestCommonAncestor(BinaryTreeNode p, BinaryTreeNode q) {
         return lowestCommonAncestor(root, p, q);
